@@ -37,7 +37,7 @@ This project consists of two parts:
     - Add the **Backend URL** you got from Railway:
 
       ```env
-      VITE_API_URL=https://brastorne-backend.onrender.com
+      VITE_API_URL=https://brastorne.onrender.com
       VITE_USE_EDGE_FUNCTION=false
       ```
 

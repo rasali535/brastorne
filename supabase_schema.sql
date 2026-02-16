@@ -37,3 +37,11 @@ begin
   limit match_count;
 end;
 $$;
+-- Create a table for lead capture
+create table if not exists leads (
+  id bigserial primary key,
+  name text,
+  email text,
+  interest text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);

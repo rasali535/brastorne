@@ -3,11 +3,23 @@ import { supabase } from '../lib/supabaseClient';
 
 export const useChat = () => {
     const [messages, setMessages] = useState(() => {
-        // Load history from localStorage on initialization
         const saved = localStorage.getItem('brastorne_chat_history');
-        return saved ? JSON.parse(saved) : [
-            { id: '1', role: 'assistant', content: 'Dumela! I am Lebo, your Brastorne assistant. How can I help you with mAgri, Mpotsa, or Vuka today? / ke nna Lebo, nka go thusa jang ka mAgri, Mpotsa, kgotsa Vuka gompieno?' }
+        if (saved) return JSON.parse(saved);
+
+        // Initial onboarding message
+        return [
+            { id: '1', role: 'assistant', content: "Dumela! Welcome to Brastorne. I'm Lebo, and I'm excited to help you. Before we dive into our services, could you please tell me your name? / Leina la gago ke mang?" }
         ];
+    });
+
+    const [onboardingStep, setOnboardingStep] = useState(() => {
+        const step = localStorage.getItem('brastorne_onboarding_step');
+        return step ? parseInt(step) : 0;
+    });
+
+    const [userData, setUserData] = useState(() => {
+        const data = localStorage.getItem('brastorne_user_data');
+        return data ? JSON.parse(data) : { name: '', email: '', interest: '' };
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -31,10 +43,20 @@ export const useChat = () => {
         }
     };
 
-    // Persist messages to localStorage
+    // Persist to localStorage
     useEffect(() => {
         localStorage.setItem('brastorne_chat_history', JSON.stringify(messages));
-    }, [messages]);
+        localStorage.setItem('brastorne_onboarding_step', onboardingStep.toString());
+        localStorage.setItem('brastorne_user_data', JSON.stringify(userData));
+    }, [messages, onboardingStep, userData]);
+
+    const saveLead = async (data) => {
+        try {
+            await supabase.from('leads').insert([data]);
+        } catch (e) {
+            console.warn('Lead capture failed', e);
+        }
+    };
 
     const sendMessage = async (content) => {
         if (!content.trim()) return;
@@ -47,6 +69,49 @@ export const useChat = () => {
 
         setMessages(prev => [...prev, userMessage]);
         setIsLoading(true);
+
+        // --- ONBOARDING LOGIC ---
+        if (onboardingStep < 3) {
+            setTimeout(async () => {
+                let reply = "";
+                let nextStep = onboardingStep;
+                let nextData = { ...userData };
+
+                if (onboardingStep === 0) {
+                    nextData.name = content;
+                    reply = `Nice to meet you, ${content}! Could you share your email address so we can keep in touch? / O ka re naya email ya gago gore re kgone go ikgolaganya le wena?`;
+                    nextStep = 1;
+                } else if (onboardingStep === 1) {
+                    // Simple email validation
+                    if (!content.includes('@')) {
+                        reply = "That doesn't look like a valid email. Please try again! / Email eo e lebega e se fela ka fa re e tlhokang ka gone. Tswee-tswee leka gape.";
+                    } else {
+                        nextData.email = content;
+                        reply = "Got it! Lastly, what are you most interested in? (mAgri, Mpotsa, or Vuka) / O tlhoka go itse thata ka eng gareng ga tse: mAgri, Mpotsa, kgotsa Vuka?";
+                        nextStep = 2;
+                    }
+                } else if (onboardingStep === 2) {
+                    nextData.interest = content;
+                    reply = `Thank you, ${userData.name}! You're all set. I can now answer any questions you have about Brastorne or our services. What's on your mind?`;
+                    nextStep = 3;
+
+                    // Finalize onboarding and save lead
+                    await saveLead(nextData);
+                }
+
+                setUserData(nextData);
+                setOnboardingStep(nextStep);
+                setMessages(prev => [...prev, {
+                    id: (Date.now() + 1).toString(),
+                    role: 'assistant',
+                    content: reply
+                }]);
+                setIsLoading(false);
+            }, 800);
+            return;
+        }
+        // --- END ONBOARDING ---
+
         await logEvent(content);
 
         // --- MOCK MODE LOGIC ---
@@ -140,10 +205,14 @@ export const useChat = () => {
 
     const clearHistory = () => {
         localStorage.removeItem('brastorne_chat_history');
+        localStorage.removeItem('brastorne_onboarding_step');
+        localStorage.removeItem('brastorne_user_data');
+        setOnboardingStep(0);
+        setUserData({ name: '', email: '', interest: '' });
         setMessages([{
             id: '1',
             role: 'assistant',
-            content: 'History cleared. How can I help you now?'
+            content: "Dumela! Welcome back to Brastorne. Could you please tell me your name again? / Leina la gago ke mang?"
         }]);
     };
 

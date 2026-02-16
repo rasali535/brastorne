@@ -88,17 +88,41 @@ export const useChat = () => {
         // --- END MOCK MODE ---
 
         try {
-            // Call the Supabase Edge Function 'chat-query'
-            const { data, error } = await supabase.functions.invoke('chat-query', {
-                body: { query: content, history: messages.slice(-5) } // Send last 5 messages for context
-            });
+            // Determine if we should use Supabase Edge Functions or the Railway Backend
+            // Default to Backend if not specified, or if VITE_API_URL is present
+            const useBackend = !import.meta.env.VITE_USE_EDGE_FUNCTION;
+            const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-            if (error) throw error;
+            let replyText = '';
+
+            if (useBackend) {
+                // Call Railway Backend
+                const response = await fetch(`${backendUrl}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: content, history: messages.slice(-5) })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Backend Error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                replyText = data.reply;
+            } else {
+                // Fallback: Use Supabase Edge Function
+                const { data, error } = await supabase.functions.invoke('chat-query', {
+                    body: { query: content, history: messages.slice(-5) }
+                });
+
+                if (error) throw error;
+                replyText = data.reply;
+            }
 
             const aiMessage = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
-                content: data.reply
+                content: replyText
             };
 
             setMessages(prev => [...prev, aiMessage]);

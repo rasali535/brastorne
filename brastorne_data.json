@@ -1,0 +1,107 @@
+[
+  {
+    "category": "Company Overview",
+    "topic": "About Brastorne",
+    "content": "Brastorne is a Botswana-based technology company founded in 2013. We are dedicated to bridging the digital divide across Africa by transforming simple feature phones into powerful, internet-enabled tools using USSD and SMS technology. Our mission is to connect the 760 million Africans who lack meaningful access to the digital world. Our vision is to 'Connect the Unconnected to the World.' We currently serve over 5.3 million users in Botswana, DRC, Cameroon, Guinea, and Zambia.",
+    "key_facts": [
+      "Founded: 2013",
+      "Headquarters: Gaborone International Finance Park, Botswana",
+      "Reach: 5.3M+ people in 6 African countries",
+      "Core Tech: USSD and SMS based services"
+    ]
+  },
+  {
+    "category": "Company Leadership",
+    "topic": "Leadership Team",
+    "content": "Brastorne is led by a team of visionary founders and executives: Martin Stimela (Co-founder & CEO), Naledi Magowe (Co-founder, Chief Growth Officer, and CMO), and Hankusa Hakoola (CFO). The team consists of 28 passionate individuals committed to innovation and digital equity in Africa.",
+    "leadership": [
+      {
+        "name": "Martin Stimela",
+        "role": "Co-founder & CEO"
+      },
+      {
+        "name": "Naledi Magowe",
+        "role": "Co-founder & CGO/CMO"
+      },
+      {
+        "name": "Hankusa Hakoola",
+        "role": "CFO"
+      }
+    ]
+  },
+  {
+    "category": "Service",
+    "topic": "mAgri",
+    "service_name": "mAgri",
+    "ussd_code": "*157#",
+    "description": "mAgri is a mobile ecosystem that empowers small-scale farmers. It provides real-time market prices, localized weather forecasts, and expert agricultural advice via USSD (*157#) and SMS. Farmers can list produce for sale, connecting directly with buyers, which has led to a 250% increase in yields for some users.",
+    "features": [
+      "Market Prices",
+      "Weather Forecasts",
+      "Produce Listing",
+      "Financial services for farmers"
+    ]
+  },
+  {
+    "category": "Service",
+    "topic": "Mpotsa",
+    "service_name": "Mpotsa",
+    "ussd_code": "*152#",
+    "description": "Mpotsa (meaning 'Ask me') is the 'Google for feature phones.' It is an SMS-based Q&A service providing localized information on health, legal advice, job opportunities, and general knowledge. It allows users without internet access to get verified answers instantly via *152# or SMS.",
+    "features": [
+      "Answer any question",
+      "Localized content",
+      "Bilingual support (Setswana/English)",
+      "Accessible on any phone"
+    ]
+  },
+  {
+    "category": "Service",
+    "topic": "Vuka",
+    "service_name": "Vuka",
+    "ussd_code": "*156#",
+    "description": "Vuka is a text-based social networking service designed for users even on 2G/3G networks. Via *156#, users can create profiles, form community groups, chat with friends, and broadcast messages without needing a data plan or smartphone.",
+    "features": [
+      "Social Networking on USSD",
+      "Community Groups",
+      "No internet needed",
+      "Profiles and Friending"
+    ]
+  },
+  {
+    "category": "Recognition",
+    "topic": "Awards & Achievements",
+    "content": "Brastorne is globally recognized for its impact. Our achievements include being an MIT Solver (2021), receiving the HP Advancing Digital Equity award (2021), being a Google Black Founders Fund Alumnus (2022), and winning the Heifer International & MIT AYuTe Africa Challenge (2022). We also received the SAIS Female Founder Award in 2025.",
+    "awards": [
+      "MIT Solver 2021",
+      "HP Advancing Digital Equity 2021",
+      "Google Black Founders Fund 2022",
+      "AYuTe Africa Challenge Winner 2022",
+      "SAIS Female Founder Award 2025"
+    ]
+  },
+  {
+    "category": "Strategy",
+    "topic": "Mission, Vision & Values",
+    "content": "Mission: To connect the 760 million Africans lacking digital access. Vision: To connect the Unconnected to the world. Core Values: Impact, Boldness, Integrity, Innovation, and Grit.",
+    "values": [
+      "Impact",
+      "Boldness",
+      "Integrity",
+      "Innovation",
+      "Grit"
+    ]
+  },
+  {
+    "category": "Global Reach",
+    "topic": "Presence & Expansion",
+    "content": "Currently operating in Botswana, DRC, Cameroon, Guinea, and Zambia. We have reached over 1 million users in Botswana alone. Future expansion plans include Madagascar, Mali, Burkina Faso, and Côte d'Ivoire.",
+    "countries": [
+      "Botswana",
+      "DRC",
+      "Cameroon",
+      "Guinea",
+      "Zambia"
+    ]
+  }
+]

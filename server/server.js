@@ -3,6 +3,10 @@ const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const geminiKey = process.env.GEMINI_API_KEY;
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 

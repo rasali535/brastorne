@@ -5,27 +5,30 @@ This project consists of two parts:
 1. **Frontend**: A React/Vite application (in the root directory).
 2. **Backend**: An Express.js server (in the `server` directory).
 
-## 1. Deploying the Backend to Railway
+## 1. Deploying the Backend to Render
 
-1. **Create a Railway Project**:
-    - Go to [Railway.app](https://railway.app/) and create a new project.
-    - Select "Message from GitHub Repo" and choose this repository (`rasali535/brastorne`).
+1. **Create a Render Service**:
+    - Log in to [Render.com](https://render.com/).
+    - Click **New** -> **Web Service**.
+    - Connect your GitHub repository (`rasali535/brastorne`).
 
-2. **Configure the Service**:
-    - Railway will likely detect multiple projects or ask for the root directory.
-    - Go to **Settings** -> **Root Directory** and set it to `/server`.
-    - This ensures Railway builds and deploys the backend code.
+2. **Configure the Web Service**:
+    - **Name**: `brastorne-backend`
+    - **Root Directory**: `server`
+    - **Environment**: `Node`
+    - **Build Command**: `npm install`
+    - **Start Command**: `node server.js`
 
 3. **Set Environment Variables**:
-    - Go to **Variables** and add the following keys (from your `.env`):
+    - Go to **Environment** tab and add:
         - `SUPABASE_URL`: Your Supabase Project URL.
-        - `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase Service Role Key (needed for backend access).
+        - `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase Service Role Key.
         - `GEMINI_API_KEY`: Your Google Gemini API Key.
-        - `PORT`: 3000 (optional, Railway sets this automatically usually).
+        - `PORT`: `10000` (Render's default)
 
 4. **Deploy**:
-    - Railway should automatically deploy. Once successful, it will provide a **Public Domain** (e.g., `https://brastorne-server-production.up.railway.app`).
-    - Copy this URL. You will need it for the frontend.
+    - Render will automatically deploy from the `main` branch.
+    - Once successful, copy the service URL (e.g., `https://brastorne-backend.onrender.com`).
 
 ## 2. Deploying the Frontend to Hostinger
 
@@ -33,8 +36,8 @@ This project consists of two parts:
     - Open your local `.env` file (or create one for production if using CI/CD).
     - Add the **Backend URL** you got from Railway:
 
-      ```
-      VITE_API_URL=https://brastorne-server-production.up.railway.app
+      ```env
+      VITE_API_URL=https://brastorne-backend.onrender.com
       VITE_USE_EDGE_FUNCTION=false
       ```
 
@@ -57,7 +60,7 @@ This project consists of two parts:
 
 4. **Verify**:
     - Visit your website URL.
-    - The chat widget should now connect to your Railway backend to fetch answers!
+    - The chat widget should now connect to your Render backend to fetch answers!
 
 ## Troubleshooting
 

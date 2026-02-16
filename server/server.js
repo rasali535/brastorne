@@ -11,13 +11,8 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Supabase Client
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const geminiKey = process.env.GEMINI_API_KEY;
-
 if (!supabaseUrl || !supabaseServiceKey || !geminiKey) {
-    console.error("❌ Missing environment variables! Please check your .env file.");
-    process.exit(1);
+    console.warn("⚠️ WARNING: Missing environment variables! The server will start, but chat functionality will fail until they are set.");
 }
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);

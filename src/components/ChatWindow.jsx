@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, Bot, Wifi, WifiOff, Loader2, Trash2 } from 'lucide-react';
+import { Send, User, Bot, Wifi, WifiOff, Loader2, Trash2, X } from 'lucide-react';
 import { useChat } from '../hooks/useChat';
 
-const ChatWindow = () => {
+const ChatWindow = ({ isWidget = false, closeChat }) => {
     const { messages, sendMessage, isLoading, clearHistory } = useChat();
     const [input, setInput] = useState('');
     const [lowDataMode, setLowDataMode] = useState(false);
@@ -25,8 +25,12 @@ const ChatWindow = () => {
         await sendMessage(text);
     };
 
+    const containerClasses = isWidget
+        ? "flex flex-col h-full w-full bg-white relative overflow-hidden"
+        : "flex flex-col h-[90vh] w-full max-w-4xl mx-auto bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-zinc-100 sm:rounded-3xl overflow-hidden relative";
+
     return (
-        <div className="flex flex-col h-[90vh] w-full max-w-4xl mx-auto bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-zinc-100 sm:rounded-3xl overflow-hidden relative" role="main" aria-label="Brastorne AI Website Assistant">
+        <div className={containerClasses} role="main" aria-label="Brastorne AI Website Assistant">
             {isMock && (
                 <div className="absolute top-0 left-0 w-full bg-yellow-400 text-yellow-900 text-[10px] font-bold text-center py-1 z-50 uppercase tracking-widest">
                     Preview Mode: Mock Analytics and AI Responses Active
@@ -34,33 +38,33 @@ const ChatWindow = () => {
             )}
 
             {/* Header */}
-            <header className="bg-brastorne-black text-white px-8 py-6 flex items-center justify-between shadow-xl z-10 transition-all">
+            <header className={`${isWidget ? 'px-6 py-4' : 'px-8 py-6'} bg-brastorne-black text-white flex items-center justify-between shadow-xl z-10 transition-all`}>
                 <div className="flex items-center space-x-4">
                     <div className="relative">
-                        <div className="w-12 h-12 bg-gradient-to-tr from-brastorne-orange to-[#ff8c52] rounded-2xl flex items-center justify-center shadow-lg rotate-3">
-                            <Bot size={28} className="text-white -rotate-3" />
+                        <div className={`${isWidget ? 'w-10 h-10' : 'w-12 h-12'} bg-gradient-to-tr from-brastorne-orange to-[#ff8c52] rounded-2xl flex items-center justify-center shadow-lg rotate-3`}>
+                            <Bot size={isWidget ? 24 : 28} className="text-white -rotate-3" />
                         </div>
-                        <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-brastorne-green border-2 border-brastorne-black rounded-full shadow-sm"></span>
+                        <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-brastorne-green border-2 border-brastorne-black rounded-full shadow-sm"></span>
                     </div>
                     <div>
-                        <h1 className="font-extrabold text-xl tracking-tight leading-tight">Lebo</h1>
-                        <p className="text-zinc-400 text-xs font-medium">Brastorne AI Assistant</p>
+                        <h1 className={`${isWidget ? 'text-lg' : 'text-xl'} font-extrabold tracking-tight leading-tight`}>Lebo</h1>
+                        <p className="text-zinc-400 text-[10px] font-medium uppercase tracking-wider">Assistant</p>
                     </div>
                 </div>
 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
                     <button
                         onClick={clearHistory}
                         className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-xl transition-all"
                         aria-label="Clear chat history"
                         title="Clear History"
                     >
-                        <Trash2 size={20} />
+                        <Trash2 size={isWidget ? 18 : 20} />
                     </button>
 
                     <button
                         onClick={() => setLowDataMode(!lowDataMode)}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all text-xs font-bold border ${lowDataMode
+                        className={`flex items-center space-x-2 ${isWidget ? 'p-2' : 'px-4 py-2'} rounded-xl transition-all text-[10px] font-bold border ${lowDataMode
                             ? 'bg-brastorne-orange border-brastorne-orange text-white shadow-lg'
                             : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white'
                             }`}
@@ -68,8 +72,18 @@ const ChatWindow = () => {
                         aria-label="Toggle low data mode"
                     >
                         {lowDataMode ? <WifiOff size={16} /> : <Wifi size={16} />}
-                        <span className="hidden md:inline">{lowDataMode ? 'LOW DATA ACTIVE' : 'STANDARD MODE'}</span>
+                        {!isWidget && <span className="hidden md:inline">{lowDataMode ? 'LOW DATA ACTIVE' : 'STANDARD MODE'}</span>}
                     </button>
+
+                    {isWidget && (
+                        <button
+                            onClick={closeChat}
+                            className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-xl transition-all"
+                            aria-label="Close chat"
+                        >
+                            <X size={18} />
+                        </button>
+                    )}
                 </div>
             </header>
 

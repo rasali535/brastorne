@@ -14,12 +14,13 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Initialize Supabase Client
-if (!supabaseUrl || !supabaseServiceKey || !geminiKey) {
-    console.warn("⚠️ WARNING: Missing environment variables! The server will start, but chat functionality will fail until they are set.");
+// Initialize Supabase Client lazily
+let supabase;
+if (supabaseUrl && supabaseServiceKey) {
+    supabase = createClient(supabaseUrl, supabaseServiceKey);
+} else {
+    console.warn("⚠️ WARNING: Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY! Chat features will not work.");
 }
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // Health Check Endpoint
 app.get('/health', (req, res) => {
@@ -33,6 +34,10 @@ app.post('/api/chat', async (req, res) => {
 
         if (!query) {
             return res.status(400).json({ error: 'Query is required' });
+        }
+
+        if (!supabase || !geminiKey) {
+            return res.status(503).json({ error: 'Chat service is not configured. Missing environment variables.' });
         }
 
         console.log(`📩 Received query: "${query}"`);
@@ -115,6 +120,6 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Brastorne Backend running on port ${PORT}`);
 });
